@@ -316,7 +316,7 @@ Next reward available in: <span id="countdown"></span>
 </div>
 </div>
 <script>
-let coins = parseInt(localStorage.getItem('coins')) || 10000;
+let coins = parseInt(localStorage.getItem('coins')) || 1000;
 let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
 let unopenedPacks = JSON.parse(localStorage.getItem('unopenedPacks')) || [];
 let lastClaimTime = localStorage.getItem('lastClaimTime') || 0;
@@ -395,17 +395,17 @@ const pokemonData = [
 ];
 const packPrices = {
 basic: 1000,
-premium: 2500,
-ultra: 5000,
-master: 10000,
-legendary: 25000,
-mythical: 50000,
-divine: 100000,
-celestial: 250000,
-cosmic: 500000,
-eternal: 1000000,
-infinity: 2500000,
-omega: 5000000
+premium: 1000,
+ultra: 1000,
+master: 1000,
+legendary: 1000,
+mythical: 1000,
+divine: 1000,
+celestial: 1000,
+cosmic: 1000,
+eternal: 1000,
+infinity: 1000,
+omega: 1000
 };
 function updateCoins() {
 document.getElementById('coinBalance').textContent = coins;
@@ -417,6 +417,7 @@ if (coins >= price) {
 coins -= price;
 unopenedPacks.push(type);
 updateCoins();
+localStorage.setItem('unopenedPacks', JSON.stringify(unopenedPacks));
 updateInventoryView();
 // Show purchase notification
 const notification = document.createElement('div');
@@ -434,12 +435,29 @@ setTimeout(() => {
 notification.classList.add('opacity-0', 'transition-opacity', 'duration-500');
 setTimeout(() => notification.remove(), 500);
 }, 3000);
+} else {
+// Show insufficient funds notification
+const notification = document.createElement('div');
+notification.className = 'fixed top-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-lg z-50 flex items-center';
+notification.innerHTML = `
+<i class="ri-error-warning-line text-xl mr-2"></i>
+<div>
+<p class="font-medium">Insufficient funds</p>
+<p class="text-sm">You need ${price - coins} more coins</p>
+</div>
+`;
+document.body.appendChild(notification);
+setTimeout(() => {
+notification.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+setTimeout(() => notification.remove(), 500);
+}, 3000);
 }
 }
 function openPack(type) {
 const index = unopenedPacks.indexOf(type);
 if (index > -1) {
 unopenedPacks.splice(index, 1);
+localStorage.setItem('unopenedPacks', JSON.stringify(unopenedPacks));
 const cards = getRandomCards(type);
 showCardReveal(cards);
 }
@@ -584,7 +602,23 @@ const card = inventory[index];
 coins += card.value;
 inventory.splice(index, 1);
 updateCoins();
+localStorage.setItem('inventory', JSON.stringify(inventory));
 updateInventoryView();
+// Show sell notification
+const notification = document.createElement('div');
+notification.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg z-50 flex items-center';
+notification.innerHTML = `
+<i class="ri-money-dollar-circle-line text-xl mr-2"></i>
+<div>
+<p class="font-medium">Card sold!</p>
+<p class="text-sm">You received ${card.value} coins</p>
+</div>
+`;
+document.body.appendChild(notification);
+setTimeout(() => {
+notification.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+setTimeout(() => notification.remove(), 500);
+}, 3000);
 }
 function updateInventoryView() {
 localStorage.setItem('inventory', JSON.stringify(inventory));
