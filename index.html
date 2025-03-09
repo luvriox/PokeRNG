@@ -316,9 +316,9 @@ Next reward available in: <span id="countdown"></span>
 </div>
 </div>
 <script>
-let coins = 1000;
-let inventory = [];
-let unopenedPacks = [];
+let coins = parseInt(localStorage.getItem('coins')) || 10000;
+let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+let unopenedPacks = JSON.parse(localStorage.getItem('unopenedPacks')) || [];
 let lastClaimTime = localStorage.getItem('lastClaimTime') || 0;
 function claimDailyReward() {
 const now = Date.now();
@@ -394,21 +394,22 @@ const pokemonData = [
 { name: "Palkia", rarity: "Legendary", value: 2200, stats: { hp: 190, attack: 150, defense: 150, speed: 145 }, image: "https://public.readdy.ai/ai/img_res/59e61a9a7b17c653cdb39fb42f5d4515.jpg" }
 ];
 const packPrices = {
-basic: 100,
-premium: 250,
-ultra: 500,
-master: 1000,
-legendary: 2000,
-mythical: 5000,
-divine: 10000,
-celestial: 25000,
-cosmic: 50000,
-eternal: 100000,
-infinity: 250000,
-omega: 500000
+basic: 1000,
+premium: 2500,
+ultra: 5000,
+master: 10000,
+legendary: 25000,
+mythical: 50000,
+divine: 100000,
+celestial: 250000,
+cosmic: 500000,
+eternal: 1000000,
+infinity: 2500000,
+omega: 5000000
 };
 function updateCoins() {
 document.getElementById('coinBalance').textContent = coins;
+localStorage.setItem('coins', coins);
 }
 function buyPack(type) {
 const price = packPrices[type];
@@ -586,6 +587,8 @@ updateCoins();
 updateInventoryView();
 }
 function updateInventoryView() {
+localStorage.setItem('inventory', JSON.stringify(inventory));
+localStorage.setItem('unopenedPacks', JSON.stringify(unopenedPacks));
 const unopenedPacksContainer = document.getElementById('unopenedPacks');
 unopenedPacksContainer.innerHTML = '';
 const packCounts = {};
