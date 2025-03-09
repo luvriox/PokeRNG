@@ -361,44 +361,39 @@ document.getElementById('dailyRewardTimer').classList.remove('hidden');
 updateDailyRewardTimer();
 }
 const pokemonData = [
-// Common Pokemon
-{ name: "Pikachu", rarity: "Common", value: 3500, stats: { hp: 60, attack: 55, defense: 40, speed: 90 }, image: "https://public.readdy.ai/ai/img_res/b2da56ae3147eef334618ffb78c19db3.jpg" },
-{ name: "Bulbasaur", rarity: "Common", value: 3000, stats: { hp: 45, attack: 49, defense: 49, speed: 45 }, image: "https://public.readdy.ai/ai/img_res/3c04d54c84bbdf9b3fcdd4e82d114178.jpg" },
-{ name: "Squirtle", rarity: "Common", value: 3000, stats: { hp: 44, attack: 48, defense: 65, speed: 43 }, image: "https://public.readdy.ai/ai/img_res/3f7d81a8d202c8ee5772221a70ee39de.jpg" },
-{ name: "Pidgey", rarity: "Common", value: 2500, stats: { hp: 40, attack: 45, defense: 40, speed: 56 }, image: "https://public.readdy.ai/ai/img_res/fa4b1fe1b9d3a7384bad1d9dcf11f080.jpg" },
-{ name: "Rattata", rarity: "Common", value: 2200, stats: { hp: 30, attack: 56, defense: 35, speed: 72 }, image: "https://public.readdy.ai/ai/img_res/1e45b26e340f49fc57f23ec7e66e9220.jpg" },
-{ name: "Caterpie", rarity: "Common", value: 2000, stats: { hp: 35, attack: 30, defense: 35, speed: 45 }, image: "https://public.readdy.ai/ai/img_res/26ce2c8fc9917eb46b4d199918a433f9.jpg" },
-{ name: "Weedle", rarity: "Common", value: 2000, stats: { hp: 35, attack: 35, defense: 30, speed: 50 }, image: "https://public.readdy.ai/ai/img_res/f8fbfdfc611649308398f1786c56176e.jpg" },
-{ name: "Pidgeotto", rarity: "Common", value: 2800, stats: { hp: 55, attack: 60, defense: 50, speed: 71 }, image: "https://public.readdy.ai/ai/img_res/edada07c7f85610b4df64dc30b2fde88.jpg" },
-// Rare Pokemon
-{ name: "Charizard", rarity: "Rare", value: 18000, stats: { hp: 120, attack: 110, defense: 85, speed: 100 }, image: "https://public.readdy.ai/ai/img_res/85ac23c1bc8893210b9b1b51b6c3dff7.jpg" },
-{ name: "Blastoise", rarity: "Rare", value: 17000, stats: { hp: 110, attack: 95, defense: 120, speed: 85 }, image: "https://public.readdy.ai/ai/img_res/95405dfe5263969d3a6e9ada5a5bf163.jpg" },
-{ name: "Venusaur", rarity: "Rare", value: 17000, stats: { hp: 100, attack: 100, defense: 100, speed: 80 }, image: "https://public.readdy.ai/ai/img_res/97ef8a71c49790d62d232f8e7d5732e1.jpg" },
-{ name: "Dragonite", rarity: "Rare", value: 19000, stats: { hp: 115, attack: 120, defense: 95, speed: 80 }, image: "https://public.readdy.ai/ai/img_res/83b503ba26225fa5b6f1fbf61e5e68b2.jpg" },
-{ name: "Gyarados", rarity: "Rare", value: 17500, stats: { hp: 95, attack: 125, defense: 79, speed: 81 }, image: "https://public.readdy.ai/ai/img_res/8f0e156618e8e8d9c6500800879f441e.jpg" },
-{ name: "Snorlax", rarity: "Rare", value: 16000, stats: { hp: 160, attack: 110, defense: 65, speed: 30 }, image: "https://public.readdy.ai/ai/img_res/4d18db67b3351bcd3bf5f38c126b6b70.jpg" },
-{ name: "Alakazam", rarity: "Rare", value: 16500, stats: { hp: 85, attack: 135, defense: 95, speed: 120 }, image: "https://public.readdy.ai/ai/img_res/662709e235a2c3f533733756233fc821.jpg" },
-{ name: "Gengar", rarity: "Rare", value: 17200, stats: { hp: 90, attack: 130, defense: 80, speed: 110 }, image: "https://public.readdy.ai/ai/img_res/f2287beb53b363794a5efdce51713ccf.jpg" },
-// Epic Pokemon
-{ name: "Mewtwo", rarity: "Epic", value: 35000, stats: { hp: 150, attack: 130, defense: 90, speed: 130 }, image: "https://public.readdy.ai/ai/img_res/dc753fe7848663ced749c2ac2be70e45.jpg" },
-{ name: "Mew", rarity: "Epic", value: 32000, stats: { hp: 140, attack: 120, defense: 120, speed: 140 }, image: "https://public.readdy.ai/ai/img_res/d1646cd2542e2f2dbf6efc343a0c1cbf.jpg" },
-{ name: "Lugia", rarity: "Epic", value: 38000, stats: { hp: 160, attack: 110, defense: 130, speed: 110 }, image: "https://public.readdy.ai/ai/img_res/46cdf86e88c8f5a53f9d85336fbb4b70.jpg" },
-{ name: "Ho-Oh", rarity: "Epic", value: 36000, stats: { hp: 155, attack: 120, defense: 120, speed: 120 }, image: "https://public.readdy.ai/ai/img_res/153e23b1f220ba70b00f6f201698b2ea.jpg" },
-{ name: "Kyogre", rarity: "Epic", value: 37000, stats: { hp: 150, attack: 125, defense: 140, speed: 100 }, image: "https://public.readdy.ai/ai/img_res/ed3e3fb42255615b7058fc7d3dea7da4.jpg" },
-{ name: "Groudon", rarity: "Epic", value: 37000, stats: { hp: 150, attack: 140, defense: 125, speed: 100 }, image: "https://public.readdy.ai/ai/img_res/8a9cc489ae4c272a6c48b9318f6d1e5a.jpg" },
-// Legendary Pokemon
-{ name: "Rayquaza", rarity: "Legendary", value: 75000, stats: { hp: 180, attack: 150, defense: 140, speed: 150 }, image: "https://public.readdy.ai/ai/img_res/60f58064f6322e5313d735dbdde292f6.jpg" },
-{ name: "Arceus", rarity: "Legendary", value: 100000, stats: { hp: 200, attack: 160, defense: 160, speed: 160 }, image: "https://public.readdy.ai/ai/img_res/c5c2fca5154100b68c99af4ba972455a.jpg" },
-{ name: "Giratina", rarity: "Legendary", value: 70000, stats: { hp: 170, attack: 140, defense: 150, speed: 140 }, image: "https://public.readdy.ai/ai/img_res/b5dbacc4b1824e24a76bc22b82f50c6a.jpg" },
-{ name: "Dialga", rarity: "Legendary", value: 85000, stats: { hp: 190, attack: 150, defense: 150, speed: 145 }, image: "https://public.readdy.ai/ai/img_res/e6810739723ca7df6011658e4a7bc908.jpg" },
-{ name: "Palkia", rarity: "Legendary", value: 85000, stats: { hp: 190, attack: 150, defense: 150, speed: 145 }, image: "https://public.readdy.ai/ai/img_res/59e61a9a7b17c653cdb39fb42f5d4515.jpg" }
+// Common Pokemon (Lower value, easier to get)
+{ name: "Pikachu", rarity: "Common", value: 25, stats: { hp: 60, attack: 55, defense: 40, speed: 90 }, image: "https://public.readdy.ai/ai/img_res/b2da56ae3147eef334618ffb78c19db3.jpg" },
+{ name: "Bulbasaur", rarity: "Common", value: 20, stats: { hp: 45, attack: 49, defense: 49, speed: 45 }, image: "https://public.readdy.ai/ai/img_res/3c04d54c84bbdf9b3fcdd4e82d114178.jpg" },
+{ name: "Squirtle", rarity: "Common", value: 20, stats: { hp: 44, attack: 48, defense: 65, speed: 43 }, image: "https://public.readdy.ai/ai/img_res/3f7d81a8d202c8ee5772221a70ee39de.jpg" },
+{ name: "Pidgey", rarity: "Common", value: 15, stats: { hp: 40, attack: 45, defense: 40, speed: 56 }, image: "https://public.readdy.ai/ai/img_res/fa4b1fe1b9d3a7384bad1d9dcf11f080.jpg" },
+{ name: "Rattata", rarity: "Common", value: 10, stats: { hp: 30, attack: 56, defense: 35, speed: 72 }, image: "https://public.readdy.ai/ai/img_res/1e45b26e340f49fc57f23ec7e66e9220.jpg" },
+// Rare Pokemon (Higher value, harder to get)
+{ name: "Charizard", rarity: "Rare", value: 1000, stats: { hp: 120, attack: 110, defense: 85, speed: 100 }, image: "https://public.readdy.ai/ai/img_res/85ac23c1bc8893210b9b1b51b6c3dff7.jpg" },
+{ name: "Blastoise", rarity: "Rare", value: 900, stats: { hp: 110, attack: 95, defense: 120, speed: 85 }, image: "https://public.readdy.ai/ai/img_res/95405dfe5263969d3a6e9ada5a5bf163.jpg" },
+{ name: "Venusaur", rarity: "Rare", value: 900, stats: { hp: 100, attack: 100, defense: 100, speed: 80 }, image: "https://public.readdy.ai/ai/img_res/97ef8a71c49790d62d232f8e7d5732e1.jpg" },
+// Epic Pokemon (Much higher value, very hard to get)
+{ name: "Mewtwo", rarity: "Epic", value: 5000, stats: { hp: 150, attack: 130, defense: 90, speed: 130 }, image: "https://public.readdy.ai/ai/img_res/dc753fe7848663ced749c2ac2be70e45.jpg" },
+{ name: "Mew", rarity: "Epic", value: 4500, stats: { hp: 140, attack: 120, defense: 120, speed: 140 }, image: "https://public.readdy.ai/ai/img_res/d1646cd2542e2f2dbf6efc343a0c1cbf.jpg" },
+{ name: "Lugia", rarity: "Epic", value: 4800, stats: { hp: 160, attack: 110, defense: 130, speed: 110 }, image: "https://public.readdy.ai/ai/img_res/46cdf86e88c8f5a53f9d85336fbb4b70.jpg" },
+// Legendary Pokemon (Extremely high value, extremely rare)
+{ name: "Rayquaza", rarity: "Legendary", value: 10000, stats: { hp: 180, attack: 150, defense: 140, speed: 150 }, image: "https://public.readdy.ai/ai/img_res/60f58064f6322e5313d735dbdde292f6.jpg" },
+{ name: "Arceus", rarity: "Legendary", value: 15000, stats: { hp: 200, attack: 160, defense: 160, speed: 160 }, image: "https://public.readdy.ai/ai/img_res/c5c2fca5154100b68c99af4ba972455a.jpg" },
+{ name: "Giratina", rarity: "Legendary", value: 12000, stats: { hp: 170, attack: 140, defense: 150, speed: 140 }, image: "https://public.readdy.ai/ai/img_res/b5dbacc4b1824e24a76bc22b82f50c6a.jpg" },
+// Mythical Pokemon (New rarity tier, astronomical value)
+{ name: "Ultra Necrozma", rarity: "Mythical", value: 50000, stats: { hp: 220, attack: 180, defense: 180, speed: 180 }, image: "https://public.readdy.ai/ai/img_res/eb6f3ac4a79c49d1d4b29b7d078fc50a.jpg" },
+{ name: "Primal Kyogre", rarity: "Mythical", value: 45000, stats: { hp: 200, attack: 170, defense: 190, speed: 160 }, image: "https://public.readdy.ai/ai/img_res/b331b73cc35c1222653480263a0e3fa3.jpg" },
+{ name: "Primal Groudon", rarity: "Mythical", value: 45000, stats: { hp: 200, attack: 190, defense: 170, speed: 160 }, image: "https://public.readdy.ai/ai/img_res/f430e686257f964bb4c63af815877f71.jpg" },
+// Divine Pokemon (New highest rarity tier, unimaginable value)
+{ name: "Origin Dialga", rarity: "Divine", value: 100000, stats: { hp: 250, attack: 200, defense: 200, speed: 200 }, image: "https://public.readdy.ai/ai/img_res/5f59954059d054e47dc5380973329187.jpg" },
+{ name: "Origin Palkia", rarity: "Divine", value: 100000, stats: { hp: 250, attack: 200, defense: 200, speed: 200 }, image: "https://public.readdy.ai/ai/img_res/339dedb900af901503ccb4e179a6200c.jpg" },
+{ name: "Eternal Arceus", rarity: "Divine", value: 250000, stats: { hp: 255, attack: 255, defense: 255, speed: 255 }, image: "https://public.readdy.ai/ai/img_res/d0d9d872ca9d400ee86bd17fa728d2a5.jpg" }
 ];
 const packPrices = {
 basic: 100,
 premium: 250,
 ultra: 500,
 master: 1000,
-legendary: 2000,
+legendary: 2500,
 mythical: 5000,
 divine: 10000,
 celestial: 25000,
@@ -465,18 +460,18 @@ updateInventoryView();
 }
 function getRandomCards(packType) {
 const packConfigs = {
-basic: { cards: 5, chances: { common: 0.95, rare: 0.05 }, maxValue: 100 },
-premium: { cards: 5, chances: { common: 0.80, rare: 0.18, epic: 0.02 }, maxValue: 250 },
-ultra: { cards: 5, chances: { common: 0.60, rare: 0.30, epic: 0.08, legendary: 0.02 }, maxValue: 500 },
-master: { cards: 5, chances: { common: 0.40, rare: 0.40, epic: 0.15, legendary: 0.05 } },
-legendary: { cards: 5, chances: { common: 0.20, rare: 0.45, epic: 0.25, legendary: 0.10 } },
-mythical: { cards: 5, chances: { common: 0.10, rare: 0.40, epic: 0.35, legendary: 0.15 } },
-divine: { cards: 5, chances: { rare: 0.40, epic: 0.40, legendary: 0.20 } },
-celestial: { cards: 5, chances: { rare: 0.30, epic: 0.45, legendary: 0.25 } },
-cosmic: { cards: 5, chances: { rare: 0.20, epic: 0.50, legendary: 0.30 } },
-eternal: { cards: 5, chances: { epic: 0.60, legendary: 0.40 } },
-infinity: { cards: 5, chances: { epic: 0.40, legendary: 0.60 } },
-omega: { cards: 5, chances: { legendary: 1.0 } }
+basic: { cards: 5, chances: { common: 0.98, rare: 0.02 }, maxValue: 100 },
+premium: { cards: 5, chances: { common: 0.90, rare: 0.09, epic: 0.01 }, maxValue: 250 },
+ultra: { cards: 5, chances: { common: 0.80, rare: 0.15, epic: 0.04, legendary: 0.01 }, maxValue: 500 },
+master: { cards: 5, chances: { common: 0.70, rare: 0.20, epic: 0.08, legendary: 0.02 } },
+legendary: { cards: 5, chances: { common: 0.50, rare: 0.30, epic: 0.15, legendary: 0.05 } },
+mythical: { cards: 5, chances: { common: 0.30, rare: 0.40, epic: 0.20, legendary: 0.09, mythical: 0.01 } },
+divine: { cards: 5, chances: { rare: 0.50, epic: 0.30, legendary: 0.15, mythical: 0.04, divine: 0.01 } },
+celestial: { cards: 5, chances: { rare: 0.40, epic: 0.35, legendary: 0.18, mythical: 0.06, divine: 0.01 } },
+cosmic: { cards: 5, chances: { epic: 0.45, legendary: 0.35, mythical: 0.15, divine: 0.05 } },
+eternal: { cards: 5, chances: { epic: 0.35, legendary: 0.40, mythical: 0.20, divine: 0.05 } },
+infinity: { cards: 5, chances: { legendary: 0.50, mythical: 0.35, divine: 0.15 } },
+omega: { cards: 5, chances: { legendary: 0.60, mythical: 0.30, divine: 0.10 } }
 };
 const cards = [];
 const config = packConfigs[packType];
