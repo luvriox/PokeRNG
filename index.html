@@ -96,7 +96,7 @@ DEFAULT: '8px',
 </div>
 </nav>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-<div id="shopSection" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div id="shopSection" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
 <div class="col-span-full bg-white rounded-lg shadow-sm p-6 border border-gray-200 mb-6">
 <div class="flex items-center justify-between">
 <div>
@@ -197,7 +197,35 @@ Next reward available in: <span id="countdown"></span>
 </div>
 <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 min-w-[300px] snap-start">
 <div class="aspect-w-4 aspect-h-3 mb-4">
-<img src="https://public.readdy.ai/ai/img_res/dbce342bb9d5807d0abc16f7c6cc2b2b.jpg" class="w-full h-full object-cover rounded-lg" alt="Cosmic Pack">
+<img src="https://public.readdy.ai/ai/img_res/774797d6e7d24e4e13dcc815e0c546ef.jpg" class="w-full h-full object-cover rounded-lg" alt="Divine Pack">
+</div>
+<h3 class="text-lg font-semibold mb-2">Divine Pack</h3>
+<p class="text-gray-600 text-sm mb-4">Contains 5 cards with high legendary rates</p>
+<div class="flex justify-between items-center">
+<div class="flex items-center">
+<i class="ri-coin-line text-yellow-500 mr-1"></i>
+<span>10000</span>
+</div>
+<button onclick="buyPack('divine')" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-primary/90 transition-colors cursor-pointer">Buy Pack</button>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 min-w-[300px] snap-start">
+<div class="aspect-w-4 aspect-h-3 mb-4">
+<img src="https://public.readdy.ai/ai/img_res/374a2a0632a3808054710d2c11c79e70.jpg" class="w-full h-full object-cover rounded-lg" alt="Celestial Pack">
+</div>
+<h3 class="text-lg font-semibold mb-2">Celestial Pack</h3>
+<p class="text-gray-600 text-sm mb-4">Contains 5 cards with excellent legendary rates</p>
+<div class="flex justify-between items-center">
+<div class="flex items-center">
+<i class="ri-coin-line text-yellow-500 mr-1"></i>
+<span>25000</span>
+</div>
+<button onclick="buyPack('celestial')" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-primary/90 transition-colors cursor-pointer">Buy Pack</button>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 min-w-[300px] snap-start">
+<div class="aspect-w-4 aspect-h-3 mb-4">
+<img src="https://public.readdy.ai/ai/img_res/16352b563ad2c88f7efd57419a7c7760.jpg" class="w-full h-full object-cover rounded-lg" alt="Cosmic Pack">
 </div>
 <h3 class="text-lg font-semibold mb-2">Cosmic Pack</h3>
 <p class="text-gray-600 text-sm mb-4">Contains 5 cards with superior legendary rates</p>
@@ -211,16 +239,44 @@ Next reward available in: <span id="countdown"></span>
 </div>
 <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 min-w-[300px] snap-start">
 <div class="aspect-w-4 aspect-h-3 mb-4">
-<img src="https://public.readdy.ai/ai/img_res/d5a7559f405ca18538127c5cc1d9108c.jpg" class="w-full h-full object-cover rounded-lg" alt="Ultimate Pack">
+<img src="https://public.readdy.ai/ai/img_res/ee55656739f434dd513529e73d1af31e.jpg" class="w-full h-full object-cover rounded-lg" alt="Eternal Pack">
 </div>
-<h3 class="text-lg font-semibold mb-2">Ultimate Pack</h3>
-<p class="text-gray-600 text-sm mb-4">Contains 5 cards with supreme legendary rates</p>
+<h3 class="text-lg font-semibold mb-2">Eternal Pack</h3>
+<p class="text-gray-600 text-sm mb-4">Contains 5 cards with epic and legendary only</p>
 <div class="flex justify-between items-center">
 <div class="flex items-center">
 <i class="ri-coin-line text-yellow-500 mr-1"></i>
 <span>100000</span>
 </div>
-<button onclick="buyPack('ultimate')" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-primary/90 transition-colors cursor-pointer">Buy Pack</button>
+<button onclick="buyPack('eternal')" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-primary/90 transition-colors cursor-pointer">Buy Pack</button>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 min-w-[300px] snap-start">
+<div class="aspect-w-4 aspect-h-3 mb-4">
+<img src="https://public.readdy.ai/ai/img_res/a4363a39ad110ede5162d7bd60f61163.jpg" class="w-full h-full object-cover rounded-lg" alt="Infinity Pack">
+</div>
+<h3 class="text-lg font-semibold mb-2">Infinity Pack</h3>
+<p class="text-gray-600 text-sm mb-4">Contains 5 cards with majority legendary cards</p>
+<div class="flex justify-between items-center">
+<div class="flex items-center">
+<i class="ri-coin-line text-yellow-500 mr-1"></i>
+<span>250000</span>
+</div>
+<button onclick="buyPack('infinity')" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-primary/90 transition-colors cursor-pointer">Buy Pack</button>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 min-w-[300px] snap-start">
+<div class="aspect-w-4 aspect-h-3 mb-4">
+<img src="https://public.readdy.ai/ai/img_res/1c92839852d7ab8e0d6138f7b090eaf8.jpg" class="w-full h-full object-cover rounded-lg" alt="Omega Pack">
+</div>
+<h3 class="text-lg font-semibold mb-2">Omega Pack</h3>
+<p class="text-gray-600 text-sm mb-4">Contains 5 guaranteed legendary cards</p>
+<div class="flex justify-between items-center">
+<div class="flex items-center">
+<i class="ri-coin-line text-yellow-500 mr-1"></i>
+<span>500000</span>
+</div>
+<button onclick="buyPack('omega')" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-primary/90 transition-colors cursor-pointer">Buy Pack</button>
 </div>
 </div>
 </div>
@@ -347,7 +403,9 @@ mythical: 5000,
 divine: 10000,
 celestial: 25000,
 cosmic: 50000,
-ultimate: 100000
+eternal: 100000,
+infinity: 250000,
+omega: 500000
 };
 function updateCoins() {
 document.getElementById('coinBalance').textContent = coins;
@@ -363,17 +421,17 @@ updateInventoryView();
 const notification = document.createElement('div');
 notification.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg z-50 flex items-center';
 notification.innerHTML = `
-  <i class="ri-checkbox-circle-line text-xl mr-2"></i>
-  <div>
-    <p class="font-medium">Successfully purchased!</p>
-    <p class="text-sm">You bought a ${type.charAt(0).toUpperCase() + type.slice(1)} Pack</p>
-  </div>
+<i class="ri-checkbox-circle-line text-xl mr-2"></i>
+<div>
+<p class="font-medium">Successfully purchased!</p>
+<p class="text-sm">You bought a ${type.charAt(0).toUpperCase() + type.slice(1)} Pack</p>
+</div>
 `;
 document.body.appendChild(notification);
 // Remove notification after 3 seconds
 setTimeout(() => {
-  notification.classList.add('opacity-0', 'transition-opacity', 'duration-500');
-  setTimeout(() => notification.remove(), 500);
+notification.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+setTimeout(() => notification.remove(), 500);
 }, 3000);
 }
 }
@@ -388,16 +446,18 @@ updateInventoryView();
 }
 function getRandomCards(packType) {
 const packConfigs = {
-basic: { cards: 5, chances: { common: 0.98, rare: 0.02 }, maxValue: 100 },
-premium: { cards: 5, chances: { common: 0.90, rare: 0.10 }, maxValue: 250 },
-ultra: { cards: 5, chances: { common: 0.85, rare: 0.14, epic: 0.01 }, maxValue: 500 },
-master: { cards: 5, chances: { common: 0.70, rare: 0.25, epic: 0.04, legendary: 0.01 } },
-legendary: { cards: 5, chances: { common: 0.60, rare: 0.30, epic: 0.08, legendary: 0.02 } },
-mythical: { cards: 5, chances: { common: 0.50, rare: 0.35, epic: 0.12, legendary: 0.03 } },
-divine: { cards: 5, chances: { common: 0.40, rare: 0.40, epic: 0.15, legendary: 0.05 } },
-celestial: { cards: 5, chances: { common: 0.30, rare: 0.45, epic: 0.18, legendary: 0.07 } },
-cosmic: { cards: 5, chances: { common: 0.20, rare: 0.50, epic: 0.20, legendary: 0.10 } },
-ultimate: { cards: 5, chances: { common: 0.10, rare: 0.55, epic: 0.25, legendary: 0.15 } }
+basic: { cards: 5, chances: { common: 0.95, rare: 0.05 }, maxValue: 100 },
+premium: { cards: 5, chances: { common: 0.80, rare: 0.18, epic: 0.02 }, maxValue: 250 },
+ultra: { cards: 5, chances: { common: 0.60, rare: 0.30, epic: 0.08, legendary: 0.02 }, maxValue: 500 },
+master: { cards: 5, chances: { common: 0.40, rare: 0.40, epic: 0.15, legendary: 0.05 } },
+legendary: { cards: 5, chances: { common: 0.20, rare: 0.45, epic: 0.25, legendary: 0.10 } },
+mythical: { cards: 5, chances: { common: 0.10, rare: 0.40, epic: 0.35, legendary: 0.15 } },
+divine: { cards: 5, chances: { rare: 0.40, epic: 0.40, legendary: 0.20 } },
+celestial: { cards: 5, chances: { rare: 0.30, epic: 0.45, legendary: 0.25 } },
+cosmic: { cards: 5, chances: { rare: 0.20, epic: 0.50, legendary: 0.30 } },
+eternal: { cards: 5, chances: { epic: 0.60, legendary: 0.40 } },
+infinity: { cards: 5, chances: { epic: 0.40, legendary: 0.60 } },
+omega: { cards: 5, chances: { legendary: 1.0 } }
 };
 const cards = [];
 const config = packConfigs[packType];
@@ -405,9 +465,30 @@ for(let i = 0; i < config.cards; i++) {
 const rand = Math.random();
 let rarity;
 const chances = config.chances;
-if (rand < chances.common) rarity = "Common";
-else if (rand < chances.common + chances.rare) rarity = "Rare";
-else rarity = "Legendary";
+let cumulative = 0;
+if (chances.common) {
+if (rand < chances.common) {
+rarity = "Common";
+}
+cumulative += chances.common;
+}
+if (chances.rare) {
+if (rand >= cumulative && rand < cumulative + chances.rare) {
+rarity = "Rare";
+}
+cumulative += chances.rare;
+}
+if (chances.epic) {
+if (rand >= cumulative && rand < cumulative + chances.epic) {
+rarity = "Epic";
+}
+cumulative += chances.epic;
+}
+if (chances.legendary) {
+if (rand >= cumulative && rand < cumulative + chances.legendary) {
+rarity = "Legendary";
+}
+}
 const possibleCards = pokemonData.filter(card => card.rarity === rarity);
 cards.push(possibleCards[Math.floor(Math.random() * possibleCards.length)]);
 }
