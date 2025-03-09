@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokemon Card Generator</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+.card {
+perspective: 1000px;
+transform-style: preserve-3d;
+transition: transform 0.6s;
+}
+.card.flipped {
+transform: rotateY(180deg);
+}
+.card-front, .card-back {
+backface-visibility: hidden;
+position: absolute;
+width: 100%;
+height: 100%;
+}
+.card-back {
+transform: rotateY(180deg);
+}
+@keyframes shine {
+0% { background-position: -100% 50%; }
+100% { background-position: 200% 50%; }
+}
+.shine-effect {
+background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+background-size: 200% 100%;
+animation: shine 1.5s infinite;
+}
+::-webkit-scrollbar {
+height: 8px;
+}
+::-webkit-scrollbar-track {
+background: #f1f1f1;
+border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+background: #888;
+border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+background: #555;
+}
+</style>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#4F46E5',
+secondary: '#F59E0B'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+</script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<nav class="bg-white shadow-sm">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between h-16">
+<div class="flex items-center">
+<span class="text-2xl font-['Pacifico'] text-primary">logo</span>
+</div>
+<div class="flex items-center space-x-8">
+<button id="shopBtn" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium cursor-pointer">Shop</button>
+<button id="inventoryBtn" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium cursor-pointer">Inventory</button>
+<div class="flex items-center bg-gray-100 px-4 py-2 rounded-full">
+<i class="ri-coin-line text-yellow-500 mr-2"></i>
+<span id="coinBalance" class="font-semibold">1000</span>
+</div>
+</div>
+</div>
+</div>
+</nav>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div id="shopSection" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="col-span-full bg-white rounded-lg shadow-sm p-6 border border-gray-200 mb-6">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="text-lg font-semibold mb-2">Daily Reward</h3>
+<p class="text-gray-600">Claim 250 coins every 24 hours</p>
+</div>
+<button id="dailyRewardBtn" onclick="claimDailyReward()" class="bg-primary text-white px-6 py-3 rounded-button hover:bg-primary/90 transition-colors cursor-pointer">
+Claim Reward
+</button>
+</div>
+<div id="dailyRewardTimer" class="text-sm text-gray-500 mt-2 hidden">
+Next reward available in: <span id="countdown"></span>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 min-w-[300px] snap-start">
+<div class="aspect-w-4 aspect-h-3 mb-4">
+<img src="https://public.readdy.ai/ai/img_res/41fbabccc48d29dcebd9d2e5ade72eba.jpg" class="w-full h-full object-cover rounded-lg" alt="Basic Pack">
+</div>
+<h3 class="text-lg font-semibold mb-2">Basic Pack</h3>
+<p class="text-gray-600 text-sm mb-4">Contains 5 cards with a chance for rare Pokemon</p>
+<div class="flex justify-between items-center">
+<div class="flex items-center">
+<i class="ri-coin-line text-yellow-500 mr-1"></i>
+<span>100</span>
+</div>
+<button onclick="buyPack('basic')" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-primary/90 transition-colors cursor-pointer">Buy Pack</button>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 min-w-[300px] snap-start">
+<div class="aspect-w-4 aspect-h-3 mb-4">
+<img src="https://public.readdy.ai/ai/img_res/11a83f2f92179fdd6e38b3a2f08e0d72.jpg" class="w-full h-full object-cover rounded-lg" alt="Premium Pack">
+</div>
+<h3 class="text-lg font-semibold mb-2">Premium Pack</h3>
+<p class="text-gray-600 text-sm mb-4">Contains 5 cards with higher chance for rare Pokemon</p>
+<div class="flex justify-between items-center">
+<div class="flex items-center">
+<i class="ri-coin-line text-yellow-500 mr-1"></i>
+<span>250</span>
+</div>
+<button onclick="buyPack('premium')" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-primary/90 transition-colors cursor-pointer">Buy Pack</button>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 min-w-[300px] snap-start">
+<div class="aspect-w-4 aspect-h-3 mb-4">
+<img src="https://public.readdy.ai/ai/img_res/fb1efd85531b69fdf53db3543de69c80.jpg" class="w-full h-full object-cover rounded-lg" alt="Ultra Pack">
+</div>
+<h3 class="text-lg font-semibold mb-2">Ultra Pack</h3>
+<p class="text-gray-600 text-sm mb-4">Contains 5 cards with high chance for rare Pokemon</p>
+<div class="flex justify-between items-center">
+<div class="flex items-center">
+<i class="ri-coin-line text-yellow-500 mr-1"></i>
+<span>500</span>
+</div>
+<button onclick="buyPack('ultra')" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-primary/90 transition-colors cursor-pointer">Buy Pack</button>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 min-w-[300px] snap-start">
+<div class="aspect-w-4 aspect-h-3 mb-4">
+<img src="https://public.readdy.ai/ai/img_res/23b37d11ec5776a88e1a566c1c225b13.jpg" class="w-full h-full object-cover rounded-lg" alt="Master Pack">
+</div>
+<h3 class="text-lg font-semibold mb-2">Master Pack</h3>
+<p class="text-gray-600 text-sm mb-4">Contains 5 cards with excellent rare chances</p>
+<div class="flex justify-between items-center">
+<div class="flex items-center">
+<i class="ri-coin-line text-yellow-500 mr-1"></i>
+<span>1000</span>
+</div>
+<button onclick="buyPack('master')" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-primary/90 transition-colors cursor-pointer">Buy Pack</button>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 min-w-[300px] snap-start">
+<div class="aspect-w-4 aspect-h-3 mb-4">
+<img src="https://public.readdy.ai/ai/img_res/0f77bf1b405208e7c1f3805b70f8b03a.jpg" class="w-full h-full object-cover rounded-lg" alt="Legendary Pack">
+</div>
+<h3 class="text-lg font-semibold mb-2">Legendary Pack</h3>
+<p class="text-gray-600 text-sm mb-4">Contains 5 cards with amazing legendary rates</p>
+<div class="flex justify-between items-center">
+<div class="flex items-center">
+<i class="ri-coin-line text-yellow-500 mr-1"></i>
+<span>2000</span>
+</div>
+<button onclick="buyPack('legendary')" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-primary/90 transition-colors cursor-pointer">Buy Pack</button>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 min-w-[300px] snap-start">
+<div class="aspect-w-4 aspect-h-3 mb-4">
+<img src="https://public.readdy.ai/ai/img_res/98dadda9c59577685c05341e15928596.jpg" class="w-full h-full object-cover rounded-lg" alt="Mythical Pack">
+</div>
+<h3 class="text-lg font-semibold mb-2">Mythical Pack</h3>
+<p class="text-gray-600 text-sm mb-4">Contains 5 cards with incredible legendary rates</p>
+<div class="flex justify-between items-center">
+<div class="flex items-center">
+<i class="ri-coin-line text-yellow-500 mr-1"></i>
+<span>5000</span>
+</div>
+<button onclick="buyPack('mythical')" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-primary/90 transition-colors cursor-pointer">Buy Pack</button>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 min-w-[300px] snap-start">
+<div class="aspect-w-4 aspect-h-3 mb-4">
+<img src="https://public.readdy.ai/ai/img_res/dbce342bb9d5807d0abc16f7c6cc2b2b.jpg" class="w-full h-full object-cover rounded-lg" alt="Cosmic Pack">
+</div>
+<h3 class="text-lg font-semibold mb-2">Cosmic Pack</h3>
+<p class="text-gray-600 text-sm mb-4">Contains 5 cards with superior legendary rates</p>
+<div class="flex justify-between items-center">
+<div class="flex items-center">
+<i class="ri-coin-line text-yellow-500 mr-1"></i>
+<span>50000</span>
+</div>
+<button onclick="buyPack('cosmic')" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-primary/90 transition-colors cursor-pointer">Buy Pack</button>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 min-w-[300px] snap-start">
+<div class="aspect-w-4 aspect-h-3 mb-4">
+<img src="https://public.readdy.ai/ai/img_res/d5a7559f405ca18538127c5cc1d9108c.jpg" class="w-full h-full object-cover rounded-lg" alt="Ultimate Pack">
+</div>
+<h3 class="text-lg font-semibold mb-2">Ultimate Pack</h3>
+<p class="text-gray-600 text-sm mb-4">Contains 5 cards with supreme legendary rates</p>
+<div class="flex justify-between items-center">
+<div class="flex items-center">
+<i class="ri-coin-line text-yellow-500 mr-1"></i>
+<span>100000</span>
+</div>
+<button onclick="buyPack('ultimate')" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-primary/90 transition-colors cursor-pointer">Buy Pack</button>
+</div>
+</div>
+</div>
+<div id="inventorySection" class="hidden">
+<div class="mb-8">
+<h2 class="text-2xl font-semibold mb-4">Unopened Packs</h2>
+<div id="unopenedPacks" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+</div>
+</div>
+<div>
+<h2 class="text-2xl font-semibold mb-4">Your Collection</h2>
+<div id="collection" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+</div>
+</div>
+</div>
+</div>
+<div id="cardRevealModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+<div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4" style="max-width: 400px;">
+<div id="cardContainer" class="card relative bg-white rounded-lg shadow-inner mb-6" style="height: 500px;">
+<div class="card-front absolute inset-0 bg-white rounded-lg flex flex-col items-center justify-center p-4">
+<img id="cardImage" class="w-64 h-64 object-cover rounded-lg mb-4" src="" alt="Pokemon Card">
+<h3 id="cardName" class="text-xl font-semibold mb-2"></h3>
+<div id="cardStats" class="space-y-2 mb-4 w-full max-w-xs"></div>
+<div class="flex items-center justify-between w-full max-w-xs mb-4">
+<div class="flex items-center">
+<i class="ri-coin-line text-yellow-500 mr-1"></i>
+<span id="cardValue"></span>
+</div>
+<span id="cardRarity" class="text-sm font-medium"></span>
+</div>
+</div>
+</div>
+<div class="flex justify-center gap-4">
+<button onclick="skipCard()" class="bg-gray-200 text-gray-700 px-8 py-3 rounded-button hover:bg-gray-300 transition-colors cursor-pointer">Skip</button>
+<button onclick="keepCard()" class="bg-primary text-white px-8 py-3 rounded-button hover:bg-primary/90 transition-colors cursor-pointer">Keep</button>
+</div>
+</div>
+</div>
+<script>
+let coins = 1000;
+let inventory = [];
+let unopenedPacks = [];
+let lastClaimTime = localStorage.getItem('lastClaimTime') || 0;
+function claimDailyReward() {
+const now = Date.now();
+const timeSinceLastClaim = now - lastClaimTime;
+const hoursLeft = 24 - Math.floor(timeSinceLastClaim / (1000 * 60 * 60));
+if (timeSinceLastClaim >= 24 * 60 * 60 * 1000) {
+coins += 250;
+updateCoins();
+lastClaimTime = now;
+localStorage.setItem('lastClaimTime', lastClaimTime);
+document.getElementById('dailyRewardBtn').disabled = true;
+document.getElementById('dailyRewardBtn').classList.add('opacity-50');
+document.getElementById('dailyRewardTimer').classList.remove('hidden');
+updateDailyRewardTimer();
+}
+}
+function updateDailyRewardTimer() {
+const now = Date.now();
+const timeSinceLastClaim = now - lastClaimTime;
+const timeLeft = 24 * 60 * 60 * 1000 - timeSinceLastClaim;
+if (timeLeft <= 0) {
+document.getElementById('dailyRewardBtn').disabled = false;
+document.getElementById('dailyRewardBtn').classList.remove('opacity-50');
+document.getElementById('dailyRewardTimer').classList.add('hidden');
+return;
+}
+const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+document.getElementById('countdown').textContent =
+`${hours}h ${minutes}m ${seconds}s`;
+setTimeout(updateDailyRewardTimer, 1000);
+}
+// Initialize daily reward button state
+const timeSinceLastClaim = Date.now() - lastClaimTime;
+if (timeSinceLastClaim < 24 * 60 * 60 * 1000) {
+document.getElementById('dailyRewardBtn').disabled = true;
+document.getElementById('dailyRewardBtn').classList.add('opacity-50');
+document.getElementById('dailyRewardTimer').classList.remove('hidden');
+updateDailyRewardTimer();
+}
+const pokemonData = [
+// Common Pokemon
+{ name: "Pikachu", rarity: "Common", value: 50, stats: { hp: 60, attack: 55, defense: 40, speed: 90 }, image: "https://public.readdy.ai/ai/img_res/b2da56ae3147eef334618ffb78c19db3.jpg" },
+{ name: "Bulbasaur", rarity: "Common", value: 40, stats: { hp: 45, attack: 49, defense: 49, speed: 45 }, image: "https://public.readdy.ai/ai/img_res/3c04d54c84bbdf9b3fcdd4e82d114178.jpg" },
+{ name: "Squirtle", rarity: "Common", value: 45, stats: { hp: 44, attack: 48, defense: 65, speed: 43 }, image: "https://public.readdy.ai/ai/img_res/3f7d81a8d202c8ee5772221a70ee39de.jpg" },
+{ name: "Pidgey", rarity: "Common", value: 30, stats: { hp: 40, attack: 45, defense: 40, speed: 56 }, image: "https://public.readdy.ai/ai/img_res/fa4b1fe1b9d3a7384bad1d9dcf11f080.jpg" },
+{ name: "Rattata", rarity: "Common", value: 25, stats: { hp: 30, attack: 56, defense: 35, speed: 72 }, image: "https://public.readdy.ai/ai/img_res/1e45b26e340f49fc57f23ec7e66e9220.jpg" },
+{ name: "Caterpie", rarity: "Common", value: 20, stats: { hp: 35, attack: 30, defense: 35, speed: 45 }, image: "https://public.readdy.ai/ai/img_res/26ce2c8fc9917eb46b4d199918a433f9.jpg" },
+{ name: "Weedle", rarity: "Common", value: 20, stats: { hp: 35, attack: 35, defense: 30, speed: 50 }, image: "https://public.readdy.ai/ai/img_res/f8fbfdfc611649308398f1786c56176e.jpg" },
+{ name: "Pidgeotto", rarity: "Common", value: 35, stats: { hp: 55, attack: 60, defense: 50, speed: 71 }, image: "https://public.readdy.ai/ai/img_res/edada07c7f85610b4df64dc30b2fde88.jpg" },
+// Rare Pokemon
+{ name: "Charizard", rarity: "Rare", value: 500, stats: { hp: 120, attack: 110, defense: 85, speed: 100 }, image: "https://public.readdy.ai/ai/img_res/85ac23c1bc8893210b9b1b51b6c3dff7.jpg" },
+{ name: "Blastoise", rarity: "Rare", value: 450, stats: { hp: 110, attack: 95, defense: 120, speed: 85 }, image: "https://public.readdy.ai/ai/img_res/95405dfe5263969d3a6e9ada5a5bf163.jpg" },
+{ name: "Venusaur", rarity: "Rare", value: 450, stats: { hp: 100, attack: 100, defense: 100, speed: 80 }, image: "https://public.readdy.ai/ai/img_res/97ef8a71c49790d62d232f8e7d5732e1.jpg" },
+{ name: "Dragonite", rarity: "Rare", value: 550, stats: { hp: 115, attack: 120, defense: 95, speed: 80 }, image: "https://public.readdy.ai/ai/img_res/83b503ba26225fa5b6f1fbf61e5e68b2.jpg" },
+{ name: "Gyarados", rarity: "Rare", value: 480, stats: { hp: 95, attack: 125, defense: 79, speed: 81 }, image: "https://public.readdy.ai/ai/img_res/8f0e156618e8e8d9c6500800879f441e.jpg" },
+{ name: "Snorlax", rarity: "Rare", value: 400, stats: { hp: 160, attack: 110, defense: 65, speed: 30 }, image: "https://public.readdy.ai/ai/img_res/4d18db67b3351bcd3bf5f38c126b6b70.jpg" },
+{ name: "Alakazam", rarity: "Rare", value: 420, stats: { hp: 85, attack: 135, defense: 95, speed: 120 }, image: "https://public.readdy.ai/ai/img_res/662709e235a2c3f533733756233fc821.jpg" },
+{ name: "Gengar", rarity: "Rare", value: 460, stats: { hp: 90, attack: 130, defense: 80, speed: 110 }, image: "https://public.readdy.ai/ai/img_res/f2287beb53b363794a5efdce51713ccf.jpg" },
+// Epic Pokemon
+{ name: "Mewtwo", rarity: "Epic", value: 1000, stats: { hp: 150, attack: 130, defense: 90, speed: 130 }, image: "https://public.readdy.ai/ai/img_res/dc753fe7848663ced749c2ac2be70e45.jpg" },
+{ name: "Mew", rarity: "Epic", value: 950, stats: { hp: 140, attack: 120, defense: 120, speed: 140 }, image: "https://public.readdy.ai/ai/img_res/d1646cd2542e2f2dbf6efc343a0c1cbf.jpg" },
+{ name: "Lugia", rarity: "Epic", value: 1100, stats: { hp: 160, attack: 110, defense: 130, speed: 110 }, image: "https://public.readdy.ai/ai/img_res/46cdf86e88c8f5a53f9d85336fbb4b70.jpg" },
+{ name: "Ho-Oh", rarity: "Epic", value: 1050, stats: { hp: 155, attack: 120, defense: 120, speed: 120 }, image: "https://public.readdy.ai/ai/img_res/153e23b1f220ba70b00f6f201698b2ea.jpg" },
+{ name: "Kyogre", rarity: "Epic", value: 1080, stats: { hp: 150, attack: 125, defense: 140, speed: 100 }, image: "https://public.readdy.ai/ai/img_res/ed3e3fb42255615b7058fc7d3dea7da4.jpg" },
+{ name: "Groudon", rarity: "Epic", value: 1080, stats: { hp: 150, attack: 140, defense: 125, speed: 100 }, image: "https://public.readdy.ai/ai/img_res/8a9cc489ae4c272a6c48b9318f6d1e5a.jpg" },
+// Legendary Pokemon
+{ name: "Rayquaza", rarity: "Legendary", value: 2000, stats: { hp: 180, attack: 150, defense: 140, speed: 150 }, image: "https://public.readdy.ai/ai/img_res/60f58064f6322e5313d735dbdde292f6.jpg" },
+{ name: "Arceus", rarity: "Legendary", value: 2500, stats: { hp: 200, attack: 160, defense: 160, speed: 160 }, image: "https://public.readdy.ai/ai/img_res/c5c2fca5154100b68c99af4ba972455a.jpg" },
+{ name: "Giratina", rarity: "Legendary", value: 1800, stats: { hp: 170, attack: 140, defense: 150, speed: 140 }, image: "https://public.readdy.ai/ai/img_res/b5dbacc4b1824e24a76bc22b82f50c6a.jpg" },
+{ name: "Dialga", rarity: "Legendary", value: 2200, stats: { hp: 190, attack: 150, defense: 150, speed: 145 }, image: "https://public.readdy.ai/ai/img_res/e6810739723ca7df6011658e4a7bc908.jpg" },
+{ name: "Palkia", rarity: "Legendary", value: 2200, stats: { hp: 190, attack: 150, defense: 150, speed: 145 }, image: "https://public.readdy.ai/ai/img_res/59e61a9a7b17c653cdb39fb42f5d4515.jpg" }
+];
+const packPrices = {
+basic: 100,
+premium: 250,
+ultra: 500,
+master: 1000,
+legendary: 2000,
+mythical: 5000,
+divine: 10000,
+celestial: 25000,
+cosmic: 50000,
+ultimate: 100000
+};
+function updateCoins() {
+document.getElementById('coinBalance').textContent = coins;
+}
+function buyPack(type) {
+const price = packPrices[type];
+if (coins >= price) {
+coins -= price;
+unopenedPacks.push(type);
+updateCoins();
+updateInventoryView();
+// Show purchase notification
+const notification = document.createElement('div');
+notification.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg z-50 flex items-center';
+notification.innerHTML = `
+  <i class="ri-checkbox-circle-line text-xl mr-2"></i>
+  <div>
+    <p class="font-medium">Successfully purchased!</p>
+    <p class="text-sm">You bought a ${type.charAt(0).toUpperCase() + type.slice(1)} Pack</p>
+  </div>
+`;
+document.body.appendChild(notification);
+// Remove notification after 3 seconds
+setTimeout(() => {
+  notification.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+  setTimeout(() => notification.remove(), 500);
+}, 3000);
+}
+}
+function openPack(type) {
+const index = unopenedPacks.indexOf(type);
+if (index > -1) {
+unopenedPacks.splice(index, 1);
+const cards = getRandomCards(type);
+showCardReveal(cards);
+}
+updateInventoryView();
+}
+function getRandomCards(packType) {
+const packConfigs = {
+basic: { cards: 5, chances: { common: 0.98, rare: 0.02 }, maxValue: 100 },
+premium: { cards: 5, chances: { common: 0.90, rare: 0.10 }, maxValue: 250 },
+ultra: { cards: 5, chances: { common: 0.85, rare: 0.14, epic: 0.01 }, maxValue: 500 },
+master: { cards: 5, chances: { common: 0.70, rare: 0.25, epic: 0.04, legendary: 0.01 } },
+legendary: { cards: 5, chances: { common: 0.60, rare: 0.30, epic: 0.08, legendary: 0.02 } },
+mythical: { cards: 5, chances: { common: 0.50, rare: 0.35, epic: 0.12, legendary: 0.03 } },
+divine: { cards: 5, chances: { common: 0.40, rare: 0.40, epic: 0.15, legendary: 0.05 } },
+celestial: { cards: 5, chances: { common: 0.30, rare: 0.45, epic: 0.18, legendary: 0.07 } },
+cosmic: { cards: 5, chances: { common: 0.20, rare: 0.50, epic: 0.20, legendary: 0.10 } },
+ultimate: { cards: 5, chances: { common: 0.10, rare: 0.55, epic: 0.25, legendary: 0.15 } }
+};
+const cards = [];
+const config = packConfigs[packType];
+for(let i = 0; i < config.cards; i++) {
+const rand = Math.random();
+let rarity;
+const chances = config.chances;
+if (rand < chances.common) rarity = "Common";
+else if (rand < chances.common + chances.rare) rarity = "Rare";
+else rarity = "Legendary";
+const possibleCards = pokemonData.filter(card => card.rarity === rarity);
+cards.push(possibleCards[Math.floor(Math.random() * possibleCards.length)]);
+}
+return cards;
+}
+let currentCards = [];
+let currentCardIndex = 0;
+function showCardReveal(cards) {
+currentCards = cards;
+currentCardIndex = 0;
+showCurrentCard();
+}
+function showCurrentCard() {
+const card = currentCards[currentCardIndex];
+const cardContainer = document.getElementById('cardContainer');
+const cardImage = document.getElementById('cardImage');
+const cardName = document.getElementById('cardName');
+const cardValue = document.getElementById('cardValue');
+const cardRarity = document.getElementById('cardRarity');
+// Add special visual effects based on card rarity
+cardContainer.className = 'card relative bg-white rounded-lg shadow-inner mb-6';
+if (card.holographic) {
+cardContainer.classList.add('shine-effect');
+}
+if (card.shiny) {
+cardContainer.classList.add('bg-gradient-to-br', 'from-yellow-100', 'to-yellow-300');
+}
+// Set card rarity color
+const rarityColors = {
+Common: 'text-gray-600',
+Rare: 'text-blue-600',
+Epic: 'text-purple-600',
+Legendary: 'text-yellow-600'
+};
+cardImage.src = card.image;
+cardName.textContent = card.name;
+cardValue.textContent = card.value;
+cardRarity.className = `text-sm font-medium ${rarityColors[card.rarity]}`;
+cardRarity.textContent = `${card.rarity}${card.shiny ? ' ★' : ''}`;
+const statsContainer = document.getElementById('cardStats');
+statsContainer.innerHTML = '';
+Object.entries(card.stats).forEach(([stat, value]) => {
+const percentage = (value / 200) * 100; // Assuming 200 is max stat value
+statsContainer.innerHTML += `
+<div class="flex flex-col mb-2">
+<div class="flex justify-between mb-1">
+<span class="text-gray-600 text-sm">${stat.toUpperCase()}</span>
+<span class="font-medium text-sm">${value}</span>
+</div>
+<div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: ${percentage}%"></div>
+</div>
+</div>
+`;
+});
+document.getElementById('cardRevealModal').classList.remove('hidden');
+}
+function keepCard() {
+const cardContainer = document.getElementById('cardContainer');
+cardContainer.classList.add('flipped');
+setTimeout(() => {
+const card = currentCards[currentCardIndex];
+inventory.push(card);
+nextCard();
+}, 600);
+}
+function nextCard() {
+currentCardIndex++;
+if (currentCardIndex < currentCards.length) {
+showCurrentCard();
+} else {
+hideCardReveal();
+updateInventoryView();
+}
+}
+function skipCard() {
+const cardContainer = document.getElementById('cardContainer');
+cardContainer.classList.add('flipped');
+setTimeout(() => {
+const cardValue = parseInt(document.getElementById('cardValue').textContent);
+coins += cardValue;
+hideCardReveal();
+updateCoins();
+}, 600);
+}
+function hideCardReveal() {
+document.getElementById('cardRevealModal').classList.add('hidden');
+document.getElementById('cardContainer').classList.remove('flipped');
+}
+function sellCard(index) {
+const card = inventory[index];
+coins += card.value;
+inventory.splice(index, 1);
+updateCoins();
+updateInventoryView();
+}
+function updateInventoryView() {
+const unopenedPacksContainer = document.getElementById('unopenedPacks');
+unopenedPacksContainer.innerHTML = '';
+const packCounts = {};
+unopenedPacks.forEach(type => {
+packCounts[type] = (packCounts[type] || 0) + 1;
+});
+Object.entries(packCounts).forEach(([type, count]) => {
+unopenedPacksContainer.innerHTML += `
+<div class="bg-white rounded-lg shadow-lg p-6 border border-gray-200 hover:shadow-xl transition-shadow duration-300">
+<h3 class="font-semibold text-lg mb-3">${type.charAt(0).toUpperCase() + type.slice(1)} Pack</h3>
+<div class="flex items-center mb-4">
+<span class="text-2xl font-bold text-primary">${count}</span>
+<span class="ml-2 text-gray-600">remaining</span>
+</div>
+<button onclick="openPack('${type}')" class="w-full bg-primary text-white px-6 py-3 rounded-button hover:bg-primary/90 transition-all duration-300 transform hover:scale-105">
+Open Pack
+</button>
+</div>
+`;
+});
+const collectionContainer = document.getElementById('collection');
+collectionContainer.innerHTML = '';
+// Sort inventory by rarity and value
+const sortedInventory = [...inventory].sort((a, b) => {
+const rarityOrder = { Legendary: 4, Epic: 3, Rare: 2, Common: 1 };
+if (rarityOrder[b.rarity] !== rarityOrder[a.rarity]) {
+return rarityOrder[b.rarity] - rarityOrder[a.rarity];
+}
+return b.value - a.value;
+});
+sortedInventory.forEach((card, index) => {
+const rarityColors = {
+Common: 'bg-gray-100 text-gray-600',
+Rare: 'bg-blue-100 text-blue-600',
+Epic: 'bg-purple-100 text-purple-600',
+Legendary: 'bg-yellow-100 text-yellow-600'
+};
+const cardClass = card.holographic ? 'shine-effect' : '';
+const shinyClass = card.shiny ? 'bg-gradient-to-br from-yellow-100 to-yellow-300' : '';
+collectionContainer.innerHTML += `
+<div class="bg-white rounded-lg shadow-lg p-6 border border-gray-200 hover:shadow-xl transition-all duration-300 ${cardClass} ${shinyClass}">
+<div class="relative mb-4">
+<img src="${card.image}" class="w-full h-48 object-cover rounded-lg" alt="${card.name}">
+${card.shiny ? '<span class="absolute top-2 right-2 text-yellow-500 text-xl">★</span>' : ''}
+</div>
+<h3 class="font-bold text-lg mb-2">${card.name}</h3>
+<div class="flex items-center justify-between mb-4">
+<span class="px-3 py-1 rounded-full text-sm font-medium ${rarityColors[card.rarity]}">${card.rarity}</span>
+<div class="flex items-center text-lg font-semibold text-yellow-500">
+<i class="ri-coin-line mr-1"></i>
+<span>${card.value}</span>
+</div>
+</div>
+<div class="space-y-2 mb-4">
+${Object.entries(card.stats).map(([stat, value]) => `
+<div class="flex flex-col">
+<div class="flex justify-between text-sm mb-1">
+<span class="text-gray-600">${stat.toUpperCase()}</span>
+<span class="font-medium">${value}</span>
+</div>
+<div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: ${(value/200)*100}%"></div>
+</div>
+</div>
+`).join('')}
+</div>
+<button onclick="sellCard(${index})" class="w-full bg-red-500 text-white px-6 py-3 rounded-button hover:bg-red-600 transition-all duration-300 transform hover:scale-105 flex items-center justify-center">
+<i class="ri-money-dollar-circle-line mr-2"></i>
+Sell for ${card.value} coins
+</button>
+</div>
+`;
+});
+}
+document.getElementById('shopBtn').addEventListener('click', () => {
+document.getElementById('shopSection').classList.remove('hidden');
+document.getElementById('inventorySection').classList.add('hidden');
+});
+document.getElementById('inventoryBtn').addEventListener('click', () => {
+document.getElementById('shopSection').classList.add('hidden');
+document.getElementById('inventorySection').classList.remove('hidden');
+updateInventoryView();
+});
+updateCoins();
+</script>
+</body>
+</html>
